@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+  schedule:
+  - cron: '0 0 15 * *'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  main:
+    name: main ci
+    runs-on: ${{matrix.os}}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu, rust: stable}
+          - {os: windows, rust: stable-msvc}
+          - {os: windows, rust: stable-gnu}
+          - {os: macos, rust: stable}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with: {submodules: true}
+      - name: Install Rust (${{matrix.rust}})
+        uses: actions-rs/toolchain@v1
+        with: {toolchain: '${{matrix.rust}}', profile: minimal, override: true}
+      - name: Build and test
+        run: cargo test
