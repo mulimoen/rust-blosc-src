@@ -11,6 +11,10 @@ exclude = [
     "c-blosc/tests/**",
     "c-blosc/bench/**",
 ]
+repository = "https://github.com/mulimoen/rust-blosc-src"
+keywords = ["compression"]
+categories = ["external-ffi-bindings", "compression"]
+description = "FFI bindings for blosc-c"
 
 [dependencies]
 
