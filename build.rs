@@ -5,9 +5,10 @@ use cc::Build;
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
 
-    let mut builder = cc::Build::new();
+    let mut build = cc::Build::new();
 
-    let compile_folder = |builder: &mut Build, folder: &str| {
+    let compile = |builder: &mut Build, folder: &str| {
+        dbg!(folder);
         for entry in fs::read_dir(folder).unwrap() {
             let path = entry.unwrap().path();
             if let Some(extension) = path.extension() {
@@ -18,39 +19,33 @@ fn main() {
         }
     };
 
-    compile_folder(&mut builder, "../c-blosc/blosc");
-    compile_folder(&mut builder, "../c-blosc/internal-complibs/lz4-1.9.4");
-    compile_folder(&mut builder, "../c-blosc/internal-complibs/zlib-1.2.13");
-    compile_folder(
-        &mut builder,
-        "../c-blosc/internal-complibs/zstd-1.5.4/common",
+    compile(&mut build, "c-blosc/blosc");
+    compile(&mut build, "c-blosc/internal-complibs/lz4-1.9.4");
+    compile(&mut build, "c-blosc/internal-complibs/zlib-1.2.13");
+    compile(&mut build, "c-blosc/internal-complibs/zstd-1.5.4/common");
+    compile(&mut build, "c-blosc/internal-complibs/zstd-1.5.4/compress");
+    compile(
+        &mut build,
+        "c-blosc/internal-complibs/zstd-1.5.4/decompress",
     );
-    compile_folder(
-        &mut builder,
-        "../c-blosc/internal-complibs/zstd-1.5.4/compress",
-    );
-    compile_folder(
-        &mut builder,
-        "../c-blosc/internal-complibs/zstd-1.5.4/decompress",
-    );
-    compile_folder(
-        &mut builder,
-        "../c-blosc/internal-complibs/zstd-1.5.4/dictBuilder",
+    compile(
+        &mut build,
+        "c-blosc/internal-complibs/zstd-1.5.4/dictBuilder",
     );
 
-    builder.includes([
-        "../c-blosc/internal-complibs/lz4-1.9.4",
-        "../c-blosc/internal-complibs/zlib-1.2.13",
-        "../c-blosc/internal-complibs/zstd-1.5.4",
+    build.includes([
+        "c-blosc/internal-complibs/lz4-1.9.4",
+        "c-blosc/internal-complibs/zlib-1.2.13",
+        "c-blosc/internal-complibs/zstd-1.5.4",
     ]);
-    builder.define("HAVE_LZ4", None);
-    builder.define("HAVE_ZLIB", None);
-    builder.define("HAVE_ZSTD", None);
+    build.define("HAVE_LZ4", None);
+    build.define("HAVE_ZLIB", None);
+    build.define("HAVE_ZSTD", None);
 
     let linklib = if cfg!(target_env = "msvc") {
         "libblosc"
     } else {
         "blosc"
     };
-    builder.compile(linklib);
+    build.compile(linklib);
 }
