@@ -19,4 +19,4 @@ description = "FFI bindings for blosc-c"
 [dependencies]
 
 [build-dependencies]
-cmake = "0.1.46"
+cc = "1.0"

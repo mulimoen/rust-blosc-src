@@ -1,35 +1,56 @@
+use std::fs;
+
+use cc::Build;
+
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
-    let mut cfg = cmake::Config::new("c-blosc");
 
-    for option in &[
-        "BUILD_SHARED",
-        "BUILD_TESTS",
-        "BUILD_FUZZERS",
-        "BUILD_BENCHMARKS",
-        "DEACTIVATE_ZSTD",
-    ] {
-        cfg.define(option, "OFF");
-    }
+    let mut builder = cc::Build::new();
 
-    if !cfg!(target_feature = "sse2") {
-        cfg.define("DEACTIVATE_SSE2", "OFF");
-    }
-    if !cfg!(target_feature = "avx") {
-        cfg.define("DEACTIVATE_AVX", "OFF");
-    }
+    let compile_folder = |builder: &mut Build, folder: &str| {
+        for entry in fs::read_dir(folder).unwrap() {
+            let path = entry.unwrap().path();
+            if let Some(extension) = path.extension() {
+                if extension == "c" || extension == "cpp" {
+                    builder.file(path);
+                }
+            }
+        }
+    };
 
-    let dst = cfg.build();
-    println!("cargo:root={}", dst.display());
-    let incdir = format!("{}/include", dst.display());
-    println!("cargo:include={}", incdir);
+    compile_folder(&mut builder, "../c-blosc/blosc");
+    compile_folder(&mut builder, "../c-blosc/internal-complibs/lz4-1.9.4");
+    compile_folder(&mut builder, "../c-blosc/internal-complibs/zlib-1.2.13");
+    compile_folder(
+        &mut builder,
+        "../c-blosc/internal-complibs/zstd-1.5.4/common",
+    );
+    compile_folder(
+        &mut builder,
+        "../c-blosc/internal-complibs/zstd-1.5.4/compress",
+    );
+    compile_folder(
+        &mut builder,
+        "../c-blosc/internal-complibs/zstd-1.5.4/decompress",
+    );
+    compile_folder(
+        &mut builder,
+        "../c-blosc/internal-complibs/zstd-1.5.4/dictBuilder",
+    );
+
+    builder.includes([
+        "../c-blosc/internal-complibs/lz4-1.9.4",
+        "../c-blosc/internal-complibs/zlib-1.2.13",
+        "../c-blosc/internal-complibs/zstd-1.5.4",
+    ]);
+    builder.define("HAVE_LZ4", None);
+    builder.define("HAVE_ZLIB", None);
+    builder.define("HAVE_ZSTD", None);
+
     let linklib = if cfg!(target_env = "msvc") {
         "libblosc"
     } else {
         "blosc"
     };
-    println!("cargo:library={}", linklib);
-
-    println!("cargo:rustc-link-search=native={}/lib", dst.display());
-    println!("cargo:rustc-link-lib=static={}", linklib);
+    builder.compile(linklib);
 }
