@@ -11,7 +11,7 @@ fn main() {
         for entry in fs::read_dir(folder).unwrap() {
             let path = entry.unwrap().path();
             if let Some(extension) = path.extension() {
-                if extension == "c" || extension == "cpp" {
+                if extension == "c" || extension == "cpp" || extension == "S" {
                     builder.file(path);
                 }
             }
