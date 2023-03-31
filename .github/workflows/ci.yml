@@ -36,3 +36,5 @@ jobs:
           toolchain: '${{matrix.rust}}'
       - name: Build and test
         run: cargo test
+      - name: Build and test (all features)
+        run: cargo test --all-features
