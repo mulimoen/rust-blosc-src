@@ -7,37 +7,38 @@ fn main() {
 
     let mut build = cc::Build::new();
 
-    let compile = |builder: &mut Build, folder: &str| {
+    let target_mscv = cfg!(target_env = "msvc");
+    let add_file = |builder: &mut Build, folder: &str| {
         for entry in fs::read_dir(folder).unwrap() {
             let path = entry.unwrap().path();
             if let Some(extension) = path.extension() {
-                if extension == "c" || extension == "cpp" || extension == "S" {
+                if extension == "c" || extension == "cpp" || (!target_mscv && extension == "S") {
                     builder.file(path);
                 }
             }
         }
     };
 
-    compile(&mut build, "c-blosc/blosc");
+    add_file(&mut build, "c-blosc/blosc");
 
     if cfg!(feature = "lz4") {
-        compile(&mut build, "c-blosc/internal-complibs/lz4-1.9.3");
+        add_file(&mut build, "c-blosc/internal-complibs/lz4-1.9.3");
         build.include("c-blosc/internal-complibs/lz4-1.9.3");
         build.define("HAVE_LZ4", None);
     }
     if cfg!(feature = "zlib") {
-        compile(&mut build, "c-blosc/internal-complibs/zlib-1.2.11");
+        add_file(&mut build, "c-blosc/internal-complibs/zlib-1.2.11");
         build.include("c-blosc/internal-complibs/zlib-1.2.11");
         build.define("HAVE_ZLIB", None);
     }
     if cfg!(feature = "zstd") {
-        compile(&mut build, "c-blosc/internal-complibs/zstd-1.5.2/common");
-        compile(&mut build, "c-blosc/internal-complibs/zstd-1.5.2/compress");
-        compile(
+        add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.2/common");
+        add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.2/compress");
+        add_file(
             &mut build,
             "c-blosc/internal-complibs/zstd-1.5.2/decompress",
         );
-        compile(
+        add_file(
             &mut build,
             "c-blosc/internal-complibs/zstd-1.5.2/dictBuilder",
         );
