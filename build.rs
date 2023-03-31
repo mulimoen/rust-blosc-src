@@ -20,17 +20,17 @@ fn main() {
 
     compile(&mut build, "c-blosc/blosc");
 
-    if cfg!(target_feature = "lz4") {
+    if cfg!(feature = "lz4") {
         compile(&mut build, "c-blosc/internal-complibs/lz4-1.9.3");
         build.include("c-blosc/internal-complibs/lz4-1.9.3");
         build.define("HAVE_LZ4", None);
     }
-    if cfg!(target_feature = "zlib") {
+    if cfg!(feature = "zlib") {
         compile(&mut build, "c-blosc/internal-complibs/zlib-1.2.11");
         build.include("c-blosc/internal-complibs/zlib-1.2.11");
         build.define("HAVE_ZLIB", None);
     }
-    if cfg!(target_feature = "zstd") {
+    if cfg!(feature = "zstd") {
         compile(&mut build, "c-blosc/internal-complibs/zstd-1.5.2/common");
         compile(&mut build, "c-blosc/internal-complibs/zstd-1.5.2/compress");
         compile(
