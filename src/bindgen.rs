@@ -2,10 +2,11 @@
 
 pub const BLOSC_VERSION_MAJOR: u32 = 1;
 pub const BLOSC_VERSION_MINOR: u32 = 21;
-pub const BLOSC_VERSION_RELEASE: u32 = 4;
-pub const BLOSC_VERSION_STRING: &[u8; 11usize] = b"1.21.4.dev\0";
+pub const BLOSC_VERSION_RELEASE: u32 = 2;
+pub const BLOSC_VERSION_STRING: &[u8; 7usize] = b"1.21.2\0";
 pub const BLOSC_VERSION_REVISION: &[u8; 6usize] = b"$Rev$\0";
-pub const BLOSC_VERSION_DATE: &[u8; 22usize] = b"$Date:: 2022-12-15 #$\0";
+pub const BLOSC_VERSION_DATE: &[u8; 22usize] = b"$Date:: 2022-12-07 #$\0";
+pub const BLOSCLZ_VERSION_STRING: &[u8; 6usize] = b"2.5.1\0";
 pub const BLOSC_VERSION_FORMAT: u32 = 2;
 pub const BLOSC_MIN_HEADER_LENGTH: u32 = 16;
 pub const BLOSC_MAX_OVERHEAD: u32 = 16;

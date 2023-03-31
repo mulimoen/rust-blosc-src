@@ -33,14 +33,18 @@ fn main() {
         "c-blosc/internal-complibs/zstd-1.5.4/dictBuilder",
     );
 
-    build.includes([
-        "c-blosc/internal-complibs/lz4-1.9.4",
-        "c-blosc/internal-complibs/zlib-1.2.13",
-        "c-blosc/internal-complibs/zstd-1.5.4",
-    ]);
-    build.define("HAVE_LZ4", None);
-    build.define("HAVE_ZLIB", None);
-    build.define("HAVE_ZSTD", None);
+    if cfg!(target_feature = "lz4") {
+        build.include("c-blosc/internal-complibs/lz4-1.9.4");
+        build.define("HAVE_LZ4", None);
+    }
+    if cfg!(target_feature = "zlib") {
+        build.include("c-blosc/internal-complibs/zlib-1.2.13");
+        build.define("HAVE_ZLIB", None);
+    }
+    if cfg!(target_feature = "zstd") {
+        build.include("c-blosc/internal-complibs/zstd-1.5.4");
+        build.define("HAVE_ZSTD", None);
+    }
 
     let linklib = if cfg!(target_env = "msvc") {
         "libblosc"

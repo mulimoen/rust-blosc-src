@@ -16,7 +16,10 @@ keywords = ["compression"]
 categories = ["external-ffi-bindings", "compression"]
 description = "FFI bindings for blosc-c"
 
-[dependencies]
+[features]
+lz4 = []
+zstd = []
+zlib = []
 
 [build-dependencies]
 cc = "1.0"
