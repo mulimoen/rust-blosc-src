@@ -53,7 +53,7 @@ fn floats_roundtrip() {
 
         let rsize = unsafe {
             blosc_compress_ctx(
-                9 as i32,
+                9i32,
                 BLOSC_BITSHUFFLE as i32,
                 typesize,
                 src_size,
@@ -91,12 +91,7 @@ fn floats_roundtrip() {
         let dest_size = nbytes / std::mem::size_of::<f32>();
         let mut result = vec![0f32; dest_size];
         let error = unsafe {
-            blosc_src::blosc_decompress_ctx(
-                dest.as_ptr().cast(),
-                result.as_mut_ptr().cast(),
-                nbytes,
-                1,
-            )
+            blosc_decompress_ctx(dest.as_ptr().cast(), result.as_mut_ptr().cast(), nbytes, 1)
         };
         assert!(error >= 1);
         result
