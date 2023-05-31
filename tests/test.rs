@@ -36,3 +36,67 @@ fn roundtrip() {
         blosc_destroy();
     }
 }
+
+#[test]
+fn floats_roundtrip() {
+    // generate numerical data
+    let src: Vec<f32> = (0..10000)
+        .map(|num| ((num * 8923) % 100) as f32 / 2f32) // multiply by big prime number
+        .collect();
+
+    // compress
+    let dest: Vec<u8> = {
+        let typesize = std::mem::size_of::<f32>();
+        let src_size = src.len() * typesize;
+        let dest_size = src_size + BLOSC_MAX_OVERHEAD as usize;
+        let mut dest = vec![0; dest_size];
+
+        let rsize = unsafe {
+            blosc_compress_ctx(
+                9i32,
+                BLOSC_BITSHUFFLE as i32,
+                typesize,
+                src_size,
+                src.as_ptr().cast(),
+                dest.as_mut_ptr().cast(),
+                dest_size,
+                BLOSC_BLOSCLZ_COMPNAME.as_ptr().cast(),
+                0,
+                1,
+            )
+        };
+
+        assert!(rsize > 0);
+        dest.drain(rsize as usize..);
+        dest
+    };
+
+    // make sure it actually compresses
+    assert!(src.len() * std::mem::size_of::<f32>() > dest.len());
+
+    // decompress
+    let result = {
+        let mut nbytes: usize = 0;
+        let mut _cbytes: usize = 0;
+        let mut _blocksize: usize = 0;
+        unsafe {
+            blosc_cbuffer_sizes(
+                dest.as_ptr().cast(),
+                &mut nbytes,
+                &mut _cbytes,
+                &mut _blocksize,
+            )
+        };
+        assert!(nbytes != 0);
+        let dest_size = nbytes / std::mem::size_of::<f32>();
+        let mut result = vec![0f32; dest_size];
+        let error = unsafe {
+            blosc_decompress_ctx(dest.as_ptr().cast(), result.as_mut_ptr().cast(), nbytes, 1)
+        };
+        assert!(error >= 1);
+        result
+    };
+
+    // check if the values in both arrays are equal
+    assert_eq!(src, result);
+}
