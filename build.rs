@@ -23,9 +23,21 @@ fn main() {
 
     if cfg!(target_feature = "sse2") {
         build.define("SHUFFLE_SSE2_ENABLED", "1");
+        if cfg!(target_env = "msvc") {
+            if cfg!(target_pointer_width = "32") {
+                build.flag("/arch:SSE2");
+            }
+        } else {
+            build.flag("-msse2");
+        }
     }
     if cfg!(target_feature = "avx2") {
         build.define("SHUFFLE_AVX2_ENABLED", "1");
+        if cfg!(target_env = "msvc") {
+            build.flag("/arch:AVX2");
+        } else {
+            build.flag("-mavx2");
+        }
     }
 
     if cfg!(feature = "lz4") {
