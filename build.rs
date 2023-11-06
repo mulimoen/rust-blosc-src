@@ -9,6 +9,9 @@ fn define_bool(b: bool) -> &'static str {
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     let mut config = cmake::Config::new("c-blosc");
+    config.define("BUILD_TESTS", "OFF");
+    config.define("BUILD_FUZZERS", "OFF");
+    config.define("BUILD_BENCHMARKS", "OFF");
     config.define("DEACTIVATE_LZ4", define_bool(!cfg!(feature = "lz4")));
     config.define("DEACTIVATE_SNAPPY", define_bool(!cfg!(feature = "snappy")));
     config.define("DEACTIVATE_ZLIB", define_bool(!cfg!(feature = "zlib")));
