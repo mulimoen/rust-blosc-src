@@ -38,3 +38,7 @@ jobs:
         run: cargo test
       - name: Build and test (all features)
         run: cargo test --all-features
+      - name: Build and test (all features, simd)
+        env:
+          RUSTFLAGS: "-C target-feature=+sse2,+avx2"
+        run: cargo test --all-features
