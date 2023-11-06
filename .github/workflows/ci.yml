@@ -14,7 +14,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  main:
+  primary:
     name: main ci
     runs-on: ${{matrix.os}}-latest
     strategy:
