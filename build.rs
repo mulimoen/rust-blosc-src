@@ -21,6 +21,13 @@ fn main() {
 
     add_file(&mut build, "c-blosc/blosc");
 
+    if cfg!(target_feature = "sse2") {
+        build.define("SHUFFLE_SSE2_ENABLED", "1");
+    }
+    if cfg!(target_feature = "avx2") {
+        build.define("SHUFFLE_AVX2_ENABLED", "1");
+    }
+
     if cfg!(feature = "lz4") {
         add_file(&mut build, "c-blosc/internal-complibs/lz4-1.9.3");
         build.include("c-blosc/internal-complibs/lz4-1.9.3");
