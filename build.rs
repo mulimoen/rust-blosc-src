@@ -46,10 +46,18 @@ fn main() {
         build.define("HAVE_LZ4", None);
     }
     if cfg!(feature = "zlib") {
-        add_file(&mut build, "c-blosc/internal-complibs/zlib-1.2.13");
-        build.include("c-blosc/internal-complibs/zlib-1.2.13");
+        let zlib_include_dir = std::env::var_os("DEP_Z_INCLUDE").unwrap();
+        let mut zlib_header = std::env::split_paths(&zlib_include_dir).next().unwrap();
+        zlib_header.push("zlib.h");
+        let zlib_lib = "z";
+
+        build.include(&zlib_header);
+
+        println!("cargo:zlib_header={}", zlib_header.to_str().unwrap());
+        println!("cargo:rustc-link-lib=static={}", &zlib_lib);
         build.define("HAVE_ZLIB", None);
     }
+
     if cfg!(feature = "zstd") {
         add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.5/common");
         add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.5/compress");
