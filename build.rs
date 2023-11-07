@@ -41,8 +41,8 @@ fn main() {
     }
 
     if cfg!(feature = "lz4") {
-        add_file(&mut build, "c-blosc/internal-complibs/lz4-1.9.4");
-        build.include("c-blosc/internal-complibs/lz4-1.9.4");
+        let lz4_include_dir = std::env::var_os("DEP_LZ4_INCLUDE").unwrap();
+        build.include(&lz4_include_dir);
         build.define("HAVE_LZ4", None);
     }
     if cfg!(feature = "zlib") {
