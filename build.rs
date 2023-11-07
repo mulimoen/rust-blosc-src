@@ -52,17 +52,8 @@ fn main() {
     }
 
     if cfg!(feature = "zstd") {
-        add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.5/common");
-        add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.5/compress");
-        add_file(
-            &mut build,
-            "c-blosc/internal-complibs/zstd-1.5.5/decompress",
-        );
-        add_file(
-            &mut build,
-            "c-blosc/internal-complibs/zstd-1.5.5/dictBuilder",
-        );
-        build.include("c-blosc/internal-complibs/zstd-1.5.5");
+        let zstd_include_dir = std::env::var_os("DEP_ZSTD_INCLUDE").unwrap();
+        build.include(&zstd_include_dir);
         build.define("HAVE_ZSTD", None);
     }
 

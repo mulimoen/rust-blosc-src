@@ -7,3 +7,6 @@ include!("bindgen.rs");
 
 #[cfg(feature = "zlib")]
 extern crate libz_sys;
+
+#[cfg(feature = "zstd")]
+extern crate zstd_sys;
