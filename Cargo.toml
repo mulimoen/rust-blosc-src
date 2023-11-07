@@ -14,6 +14,7 @@ exclude = [
     "c-blosc/internal-complibs/zlib-1.2.13/examples/**",
     "c-blosc/internal-complibs/zlib-1.2.13/doc/**",
     "c-blosc/internal-complibs/zstd-1.5.5/legacy/**",
+    "c-blosc/internal-complibs/lz4-1.9.4/**",
 ]
 repository = "https://github.com/mulimoen/rust-blosc-src"
 keywords = ["compression"]
@@ -21,9 +22,12 @@ categories = ["external-ffi-bindings", "compression"]
 description = "FFI bindings for blosc-c"
 
 [features]
-lz4 = []
+lz4 = ["dep:lz4-sys"]
 zstd = []
 zlib = []
 
 [build-dependencies]
 cc = "1.0"
+
+[dependencies]
+lz4-sys = { version = "1.9.4", optional = true }

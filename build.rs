@@ -41,8 +41,14 @@ fn main() {
     }
 
     if cfg!(feature = "lz4") {
-        add_file(&mut build, "c-blosc/internal-complibs/lz4-1.9.4");
-        build.include("c-blosc/internal-complibs/lz4-1.9.4");
+        let lz4_include_dir = std::env::var_os("DEP_LZ4_INCLUDE").unwrap();
+        let mut lz4_header = std::env::split_paths(&lz4_include_dir).next().unwrap();
+        lz4_header.push("lz4.h");
+        let lz4_lib = "lz4";
+        build.include(&lz4_header);
+        println!("cargo:zlib_header={}", lz4_header.to_str().unwrap());
+        println!("cargo:rustc-link-lib=static={}", &lz4_lib);
+
         build.define("HAVE_LZ4", None);
     }
     if cfg!(feature = "zlib") {
