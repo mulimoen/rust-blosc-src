@@ -10,9 +10,7 @@ exclude = [
     "c-blosc/compat/**",
     "c-blosc/tests/**",
     "c-blosc/bench/**",
-    "c-blosc/internal-complibs/zlib-1.2.13/**",
-    "c-blosc/internal-complibs/zstd-1.5.5/**",
-    "c-blosc/internal-complibs/lz4-1.9.4/**",
+    "c-blosc/internal-complibs/**",
 ]
 repository = "https://github.com/mulimoen/rust-blosc-src"
 keywords = ["compression"]
