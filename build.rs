@@ -41,27 +41,19 @@ fn main() {
     }
 
     if cfg!(feature = "lz4") {
-        add_file(&mut build, "c-blosc/internal-complibs/lz4-1.9.4");
-        build.include("c-blosc/internal-complibs/lz4-1.9.4");
+        let lz4_include_dir = std::env::var_os("DEP_LZ4_INCLUDE").unwrap();
+        build.include(&lz4_include_dir);
         build.define("HAVE_LZ4", None);
     }
     if cfg!(feature = "zlib") {
-        add_file(&mut build, "c-blosc/internal-complibs/zlib-1.2.13");
-        build.include("c-blosc/internal-complibs/zlib-1.2.13");
+        let zlib_include_dir = std::env::var_os("DEP_Z_INCLUDE").unwrap();
+        build.include(&zlib_include_dir);
         build.define("HAVE_ZLIB", None);
     }
+
     if cfg!(feature = "zstd") {
-        add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.5/common");
-        add_file(&mut build, "c-blosc/internal-complibs/zstd-1.5.5/compress");
-        add_file(
-            &mut build,
-            "c-blosc/internal-complibs/zstd-1.5.5/decompress",
-        );
-        add_file(
-            &mut build,
-            "c-blosc/internal-complibs/zstd-1.5.5/dictBuilder",
-        );
-        build.include("c-blosc/internal-complibs/zstd-1.5.5");
+        let zstd_include_dir = std::env::var_os("DEP_ZSTD_INCLUDE").unwrap();
+        build.include(&zstd_include_dir);
         build.define("HAVE_ZSTD", None);
     }
 
