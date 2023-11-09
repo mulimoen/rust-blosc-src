@@ -1,6 +1,6 @@
 [package]
 name = "blosc-src"
-version = "0.2.2"
+version = "0.3.0"
 authors = ["Magnus Ulimoen <magnus@ulimoen.dev>"]
 edition = "2021"
 build = "build.rs"
