@@ -15,3 +15,7 @@ The crate builds `c-blosc` from source using the `cc` crate. As such it is requi
 
 When these are requested they will be built from source and available for use by `blosc`.
 
+## Usage
+As this crate only provides FFI, the [examples from `c-blosc`](https://github.com/Blosc/c-blosc/tree/main/examples) also functions as examples for this crate. A simple roundtrip is included in [`test.rs`](tests/test.rs).
+
+The developer must take special care in dealing with memory and in multi-threaded environments. It is recommended to create and use a safe interface instead of this crate directly.

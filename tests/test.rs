@@ -3,8 +3,6 @@ use blosc_src::*;
 #[test]
 fn roundtrip() {
     unsafe {
-        blosc_init();
-
         let text =
             "I am here writing some very cool and novel words which I will compress and decompress";
 
@@ -12,7 +10,7 @@ fn roundtrip() {
 
         let mut compressed = vec![0; bytes.len() * 2];
 
-        let stat = blosc_compress(
+        let stat = blosc_compress_ctx(
             9,
             BLOSC_NOSHUFFLE as _,
             std::mem::size_of::<u8>(),
@@ -20,20 +18,22 @@ fn roundtrip() {
             bytes.as_ptr().cast(),
             compressed.as_mut_ptr().cast(),
             compressed.len(),
+            BLOSC_BLOSCLZ_COMPNAME.as_ptr().cast(),
+            0,
+            1,
         );
         assert!(stat > 0);
 
         let mut outtext = vec![0_u8; bytes.len()];
-        let stat = blosc_decompress(
+        let stat = blosc_decompress_ctx(
             compressed.as_ptr().cast(),
             outtext.as_mut_ptr().cast(),
             outtext.len(),
+            1,
         );
         assert!(stat > 0);
 
         assert_eq!(text, std::str::from_utf8(&outtext).unwrap());
-
-        blosc_destroy();
     }
 }
 
