@@ -1,13 +1,13 @@
-use std::fs;
-
 use cc::Build;
+use std::env;
+use std::fs;
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
 
     let mut build = cc::Build::new();
 
-    let target_mscv = cfg!(target_env = "msvc");
+    let target_mscv = env::var("CARGO_CFG_TARGET_ENV").as_deref() == Ok("msvc");
     let add_file = |builder: &mut Build, folder: &str| {
         for entry in fs::read_dir(folder).unwrap() {
             let path = entry.unwrap().path();
@@ -20,20 +20,22 @@ fn main() {
     };
 
     add_file(&mut build, "c-blosc/blosc");
+    let target_features = env::var("CARGO_CFG_TARGET_FEATURE").unwrap_or_default();
+    let target_features = target_features.split(',').collect::<Vec<_>>();
 
-    if cfg!(target_feature = "sse2") {
+    if target_features.contains(&"sse2") {
         build.define("SHUFFLE_SSE2_ENABLED", "1");
-        if cfg!(target_env = "msvc") {
-            if cfg!(target_pointer_width = "32") {
+        if target_mscv {
+            if env::var("CARGO_CFG_TARGET_POINTER_WIDTH").as_deref() == Ok("32") {
                 build.flag("/arch:SSE2");
             }
         } else {
             build.flag("-msse2");
         }
     }
-    if cfg!(target_feature = "avx2") {
+    if target_features.contains(&"avx2") {
         build.define("SHUFFLE_AVX2_ENABLED", "1");
-        if cfg!(target_env = "msvc") {
+        if target_mscv {
             build.flag("/arch:AVX2");
         } else {
             build.flag("-mavx2");
