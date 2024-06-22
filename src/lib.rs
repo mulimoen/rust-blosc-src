@@ -13,3 +13,6 @@ extern crate zstd_sys;
 
 #[cfg(feature = "lz4")]
 extern crate lz4_sys;
+
+#[cfg(feature = "snappy")]
+extern crate snappy_src;

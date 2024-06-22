@@ -12,6 +12,7 @@ The crate builds `c-blosc` from source using the `cc` crate. As such it is requi
 * `zlib`
 * `zstd`
 * `lz4`
+* `snappy`
 
 When these are requested they will be built from source and available for use by `blosc`.
 

@@ -58,6 +58,11 @@ fn main() {
         build.include(&zstd_include_dir);
         build.define("HAVE_ZSTD", None);
     }
+    if cfg!(feature = "snappy") {
+        let snappy_include_dir = std::env::var_os("DEP_SNAPPY_INCLUDE").unwrap();
+        build.include(&snappy_include_dir);
+        build.define("HAVE_SNAPPY", None);
+    }
 
     let linklib = if cfg!(target_env = "msvc") {
         "libblosc"
