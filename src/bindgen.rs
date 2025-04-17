@@ -7,10 +7,10 @@ pub const BLOSCLZ_VERSION_STRING: &[u8; 6usize] = b"2.5.1\0";
 
 pub const BLOSC_VERSION_MAJOR: u32 = 1;
 pub const BLOSC_VERSION_MINOR: u32 = 21;
-pub const BLOSC_VERSION_RELEASE: u32 = 5;
-pub const BLOSC_VERSION_STRING: &[u8; 7] = b"1.21.5\0";
+pub const BLOSC_VERSION_RELEASE: u32 = 6;
+pub const BLOSC_VERSION_STRING: &[u8; 7] = b"1.21.6\0";
 pub const BLOSC_VERSION_REVISION: &[u8; 6] = b"$Rev$\0";
-pub const BLOSC_VERSION_DATE: &[u8; 22] = b"$Date:: 2023-05-16 #$\0";
+pub const BLOSC_VERSION_DATE: &[u8; 22] = b"$Date:: 2024-06-24 #$\0";
 pub const BLOSC_VERSION_FORMAT: u32 = 2;
 pub const BLOSC_MIN_HEADER_LENGTH: u32 = 16;
 pub const BLOSC_MAX_OVERHEAD: u32 = 16;
