@@ -3,6 +3,7 @@ name = "blosc-src"
 version = "0.3.5"
 authors = ["Magnus Ulimoen <magnus@ulimoen.dev>"]
 edition = "2021"
+rust-version = "1.64"
 build = "build.rs"
 links = "blosc"
 license-file = "c-blosc/LICENSE.txt"

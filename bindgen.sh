@@ -6,5 +6,6 @@ bindgen --no-rustfmt-bindings \
 	--allowlist-function '.*blosc.*' \
 	--allowlist-var '.*BLOSC.*' \
 	--clang-macro-fallback \
+    --rust-target 1.64 \
     c-blosc/blosc/blosc.h > src/bindgen.rs
 rustfmt src/bindgen.rs
