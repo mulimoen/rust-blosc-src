@@ -42,3 +42,24 @@ jobs:
         env:
           RUSTFLAGS: "-C target-feature=+sse2,+avx2"
         run: cargo test --all-features
+
+  msrv:
+    name: MSRV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.64.0"
+      - name: Build and test
+        run: cargo test
+      - name: Build and test (all features)
+        run: cargo test --all-features
+      - name: Build and test (all features, simd)
+        env:
+          RUSTFLAGS: "-C target-feature=+sse2,+avx2"
+        run: cargo test --all-features
