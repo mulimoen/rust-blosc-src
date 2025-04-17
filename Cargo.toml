@@ -1,6 +1,6 @@
 [package]
 name = "blosc-src"
-version = "0.3.5"
+version = "0.3.6"
 authors = ["Magnus Ulimoen <magnus@ulimoen.dev>"]
 edition = "2021"
 rust-version = "1.64"
