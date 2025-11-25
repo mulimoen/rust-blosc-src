@@ -6,7 +6,7 @@ edition = "2021"
 rust-version = "1.64"
 build = "build.rs"
 links = "blosc"
-license-file = "c-blosc/LICENSE.txt"
+license = "BSD-3-Clause"
 exclude = [
     "c-blosc/compat/**",
     "c-blosc/tests/**",
