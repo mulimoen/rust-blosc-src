@@ -7,11 +7,19 @@ rust-version = "1.64"
 build = "build.rs"
 links = "blosc"
 license = "BSD-3-Clause"
-exclude = [
-    "c-blosc/compat/**",
-    "c-blosc/tests/**",
-    "c-blosc/bench/**",
-    "c-blosc/internal-complibs/**",
+include = [
+    "README.md",
+    "Cargo.toml",
+    "build.rs",
+    "src/**/*.rs",
+    "c-blosc/**/*.c",
+    "c-blosc/**/*.h",
+    "c-blosc/**/*.cpp",
+    "c-blocs/**/*.S",
+    "!c-blosc/compat/**",
+    "!c-blosc/tests/**",
+    "!c-blosc/bench/**",
+    "!c-blosc/internal-complibs/**",
 ]
 repository = "https://github.com/mulimoen/rust-blosc-src"
 keywords = ["compression"]
