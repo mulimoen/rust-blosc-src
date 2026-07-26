@@ -3,7 +3,7 @@ use std::env;
 use std::fs;
 
 fn main() {
-    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo::rerun-if-changed=build.rs");
 
     let mut build = cc::Build::new();
 
